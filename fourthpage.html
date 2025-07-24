@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Темный интерфейс</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: black; /* Dark Gray */
+            color: #ffffff; /* White */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* Align items to the top */
+            height: 100vh;
+        }
+
+        .container {
+            margin-top: 50px;
+            width: 90%;
+            max-width: 300px;
+            height: 300px;
+            background-color: #3a3a3a; /* Slightly lighter gray for the container */
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center; /* Center content horizontally */
+        }
+
+        .input-field {
+            width: 100%; /* Full width */
+            border: 1px solid #555; /* Darker border for input */
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #444; /* Dark background for input */
+            color: #ffffff; /* White text */
+            transition: border-color 0.3s;
+            text-align: center; /* Center text inside the input */
+        }
+
+        .input-field:focus {
+            border-color: #53377A; /* Button color */
+            outline: none;
+        }
+
+        .error-message {
+            color: red; /* Red color for error message */
+            font-size: 14px; /* Smaller font size */
+            display: none; /* Initially hidden */
+        }
+
+        .button {
+            margin-top: 15px;
+            background-color: #53377A; /* Button color */
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 18px; /* Increased padding for larger button */
+            font-size: 19px; /* Increased font size for larger button */
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s, opacity 0.5s; /* Add opacity transition */
+            opacity: 0; /* Initially hidden */
+            visibility: hidden; /* Initially hidden */
+            width: 180px;
+        }
+
+        .button.visible {
+            opacity: 1; /* Показать кнопку */
+            visibility: visible; /* Сделать кнопку видимой */
+        }
+
+        .button:hover {
+            background-color: #442a6a; /* Darker shade for hover effect */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        #nn {
+            display: none; /* Изначально скрыт */
+            width: 90%; /* Установить ширину контейнера */
+            max-width: 300px; /* Максимальная ширина контейнера */
+            margin-top: 15px; /* Отступ сверху */
+            display: none; /* Используем flexbox для центрирования */
+            flex-direction: column; /* Вертикальное выравнивание */
+            align-items: center; /* Центрируем содержимое */
+        }
+        #typing-text {
+            width: 100%; /* Set a fixed width */
+            height: 470px; /* Set a fixed height */
+            font-size: 19px; /* Change font size */
+            text-align: center; /* Center text */
+            line-height: 1.5; /* Improve line spacing */
+            overflow: hidden; /* Hide overflow text */
+        }
+    </style>
+</head>
+<body>
+    <div class="header-container">
+        <img src="Безымянный.png" alt="Логотип"> <!-- Replace with your logo image -->
+    </div>
+    <div class="container">
+        <div id="typing-text">Поздравляю! Остался последний шаг — и ты получишь доступ к полностью бесплатному чату с GPT. 🎉 Очень рад, что ты
+        с нами! Осталось совсем немного, и перед тобой откроются безграничные возможности общения с искусственным интеллектом. Желаю приятного использования! 😊</div>
+    </div>
+
+    <a href="@CHATGPTtiktok_bot"><button class="button" id="access-button" onclick="shareContact()">Получить доступ</button></a>
+
+    <script>
+        const lines = [
+           
+        ];
+        const typingTextElement = document.getElementById("typing-text");
+        const accessButton = document.getElementById("access-button");
+        const nicknameInput = document.getElementById("nickname");
+        const errorMessage = document.getElementById("error-message");
+        const nnContainer = document.getElementById("nn");
+        let lineIndex = 0;
+        let charIndex = 0;
+
+        // Telegram WebApp initialization
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        function typeLine() {
+            if (lineIndex < lines.length) {
+                const line = document.createElement('div');
+                line.classList.add('line');
+                const cursor = document.createElement('span');
+                cursor.classList.add('cursor');
+                line.appendChild(cursor);
+                typingTextElement.appendChild(line);
+
+                function typeChar() {
+                    if (charIndex < lines[lineIndex].length) {
+                        line.textContent += lines[lineIndex].charAt(charIndex);
+                        cursor.style.left = `${(charIndex + 1) * 20}px`; // Move cursor based on character index
+                        charIndex++;
+                        setTimeout(typeChar, 100); // Adjust typing speed here
+                    } else {
+                        // Move cursor to the center before removing it
+                        cursor.style.left = '50%';
+                        cursor.style.transform = 'translate(-50%, -50%)'; // Center the cursor
+                        setTimeout(() => {
+                            cursor.remove(); // Remove the cursor after typing the line
+                            charIndex = 0;
+                            lineIndex++;
+                            setTimeout(typeLine, 500); // Wait before typing the next line
+                        }, 500); // Wait for the cursor to center
+                    }
+                }
+
+                typeChar(); // Start typing the current line
+            } else {
+                // Show the button and input field after typing is complete
+                accessButton.classList.add('visible');
+                nnContainer.style.display = "flex"; // Показать контейнер
+            }
+        }
+
+        window.onload = () => {
+            typeLine(); // Start typing effect on page load
+        };
+
+        function shareContact() {
+            // Проверка на обязательное поле
+            if (nicknameInput.value.trim() === "") {
+                errorMessage.style.display = "block"; // Показать сообщение об ошибке
+                return; // Прекратить выполнение функции
+            } else {
+                errorMessage.style.display = "none"; // Скрыть сообщение об ошибке
+            }
+
+            if (window.Telegram && Telegram.WebApp) {
+                // Разворачиваем Mini App (если свернута)
+                Telegram.WebApp.expand();
+
+                // Запрашиваем контакт
+                Telegram.WebApp.requestContact().then((contact) => {
+                    if (contact) {
+                        const phoneNumber = contact.phone_number;
+                        const firstName = contact.first_name || 'Не указано';
+                        const lastName = contact.last_name || '';
+
+                        alert(`✅ Спасибо! Ваш номер: ${phoneNumber}`);
+
+                        // Можно отправить на сервер или использовать в приложении
+                        console.log("Контакт:", { phoneNumber, firstName, lastName });
+                    } else {
+                        alert("❌ Вы не поделились контактом");
+                    }
+                });
+            } else {
+                alert("Этот функционал работает только в Telegram!");
+            }
+        }
+    </script>
+</body>
+</html>
