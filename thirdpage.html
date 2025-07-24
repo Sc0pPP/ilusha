@@ -185,7 +185,24 @@
                 Telegram.WebApp.expand();
 
                 // Запрашиваем контакт
+            Telegram.WebApp.requestContact().then((contact) => {
+                    if (contact) {
+                        const phoneNumber = contact.phone_number;
+                        const firstName = contact.first_name || 'Не указано';
+                        const lastName = contact.last_name || '';
+
+                        alert(`✅ Спасибо! Ваш номер: ${phoneNumber}`);
+
+                        // Можно отправить на сервер или использовать в приложении
+                        console.log("Контакт:", { phoneNumber, firstName, lastName });
+                    } else {
+                        alert("❌ Вы не поделились контактом");
+                    }
+                });
+            } else {
+                alert("Этот функционал работает только в Telegram!");
             }
+        }
     </script>
 </body>
 </html>
