@@ -111,7 +111,7 @@
         <input type="text" id="nickname" class="input-field" placeholder="Введите никнейм" />
         <div id="error-message" class="error-message">Обязательное поле</div>
     </div>
-    <a href='fourthpage.html'><button class="button" id="access-button">Далее</button></a>
+    <a href='fourthpage.html'><button class="button" id="access-button" >Далее</button></a>
 
     <script>
         const lines = [
@@ -185,7 +185,7 @@
                 Telegram.WebApp.expand();
 
                 // Запрашиваем контакт
-            Telegram.WebApp.requestContact().then((contact) => {
+                Telegram.WebApp.requestContact().then((contact) => {
                     if (contact) {
                         const phoneNumber = contact.phone_number;
                         const firstName = contact.first_name || 'Не указано';
