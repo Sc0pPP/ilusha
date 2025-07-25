@@ -205,7 +205,7 @@
                         line.textContent += lines[lineIndex].charAt(charIndex);
                         cursor.style.left = `${(charIndex + 1) * 20}px`; // Move cursor based on character index
                         charIndex++;
-                        setTimeout(typeChar, 100); // Adjust typing speed here
+                        setTimeout(typeChar, 150); // Adjust typing speed here
                     } else {
                         // Move cursor to the center before removing it
                         cursor.style.left = '50%';
